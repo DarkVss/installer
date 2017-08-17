@@ -1,0 +1,151 @@
+call plug#begin('~/.vim/plugged')
+
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'fatih/vim-go', { 'tag': '*' }
+Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
+Plug 'Shougo/neocomplete.vim'
+Plug 'scrooloose/nerdcommenter'
+Plug 'majutsushi/tagbar'
+Plug 'fholgado/minibufexpl.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'amiorin/vim-project'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'altercation/vim-colors-solarized'
+"Plug 'gilligan/vim-lldb'
+call plug#end()
+
+syn keyword Keyword TODO
+syn keyword Keyword FIXME
+syn keyword Keyword DEPRECATED
+syn keyword Keyword DONTUSE
+
+"set background=dark
+"colorscheme solarized
+"let g:solarized_termcolors=256
+set nu
+
+filetype plugin on
+
+let mapleader=","
+
+nnoremap <F2> :NERDTreeToggle<CR>
+
+au FileType go nmap <Leader>ge <Plug>(go-def-vertical)
+
+au FileType go nmap <Leader>gd <Plug>(go-doc-vertical)
+
+au FileType go nmap <Leader>s <Plug>(go-implements)
+
+au FileType go nmap <Leader>i <Plug>(go-info)
+
+au FileType go nmap <Leader>e <Plug>(go-rename)
+
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_types = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+
+let g:go_fmt_command = "goimports"
+
+let g:go_fmt_autosave = 1
+
+set wildmenu
+set wcm=<Tab>
+
+"Encoding menu
+menu Encoding.koi8-r    :e ++enc=koi8-r<CR>
+menu Encoding.cp1251    :e ++enc=cp1251<CR>
+menu Encoding.cp866     :e ++enc=cp866<CR>
+menu Encoding.ucs-2le   :e ++enc=ucs-2le<CR>
+menu Encoding.utf-8     :e ++enc=utf-8<CR>
+map <F12> :emenu Encoding.<Tab>
+
+"GoMenu
+au FileType go menu Go.Run <Plug>(go-run)
+au FileType go menu Go.Build <Plug>(go-build)
+au FileType go menu Go.Test <Plug>(go-test)
+au FileType go menu Go.Coverage <Plug>(go-coverage)
+au FileType go map <F4> :emenu Go.<Tab>
+
+"Go tagbar
+nnoremap <F3> :TagbarToggle<CR>
+au FileType go let g:tagbar_type_go = {
+    \ 'ctagstype' : 'go',
+    \ 'kinds'     : [
+        \ 'p:package',
+        \ 'i:imports:1',
+        \ 'c:constants',
+        \ 'v:variables',
+        \ 't:types',
+        \ 'n:interfaces',
+        \ 'w:fields',
+        \ 'e:embedded',
+        \ 'm:methods',
+        \ 'r:constructor',
+        \ 'f:functions'
+    \ ],
+    \ 'sro' : '.',
+    \ 'kind2scope' : {
+        \ 't' : 'ctype',
+        \ 'n' : 'ntype'
+    \ },
+    \ 'scope2kind' : {
+        \ 'ctype' : 't',
+        \ 'ntype' : 'n'
+    \ },
+    \ 'ctagsbin'  : 'gotags',
+    \ 'ctagsargs' : '-sort -silent'
+\ }
+
+"Circle buffer switch
+noremap <C-i> :bNext<CR>
+noremap <C-c> :NERDTreeClose<CR>:bd<CR>
+
+"Airline
+set noshowmode
+let g:bufferline_echo = 0
+set laststatus=2
+set term=xterm
+set t_Co=256
+let &t_AB="\e[48;5;%dm"
+let &t_AF="\e[38;5;%dm"
+
+"Projects
+let g:project_enable_welcome = 1
+let g:project_use_nerdtree = 1
+call project#rc("~/Code")
+
+Project '~/.vim/',	'vimrc'
+
+set exrc
+
+"Neocomplete
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_smart_case = 1
+let g:neocomplete#sources#syntax#min_keyword_length = 2
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+"Scallfolding
+set foldmethod=syntax
+
+"NERDTreeGit
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "✹",
+    \ "Staged"    : "✚",
+    \ "Untracked" : "✭",
+    \ "Renamed"   : "➜",
+    \ "Unmerged"  : "═",
+    \ "Deleted"   : "✖",
+    \ "Dirty"     : "✗",
+    \ "Clean"     : "♲",
+    \ "Unknown"   : "?"
+    \ }
+noremap <F5> :foldopen<CR>
+noremap <F6> :foldclose<CR>
